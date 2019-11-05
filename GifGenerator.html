@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>The Gifverse</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=VT323&display=swap');
+
+    body{
+        background-color: black;
+        color: white;
+        text-align: center;
+        font-family: 'VT323', monospace;
+        font-size: 5vh;
+    }
+
+    #gif-container {
+        text-align: center;
+    }
+
+    #form-header {
+        margin: 3vh;
+        padding: 0;
+    }
+    img {
+        height: 40vh;
+    }
+    </style>
+</head>
+<body>
+    <h1>Into the Gifverse</h1>
+    <div id="gif-container">
+        <img src="https://vignette.wikia.nocookie.net/chickeninvaders/images/6/63/BlackHoleCIU.png/revision/latest?cb=20190111220147" alt="loading...">
+    </div><br>
+
+    <!-- this is the button to generate a random gif-->
+    <button onclick="getGif()">Dive in Deeper</button> <br>
+    <!-- this is the search bar to find a specific gif -->
+    <h2 id="form-header">Looking for something?</h2>
+    <div id="form">
+        <form id="form-container">
+            <input id="search-term" type="text" value="" />
+            <button id="button" type="submit" value="send">
+                Jump
+            </button>
+        </form>
+    </div>  
+    
+    <script>
+    const gifContainer = document.getElementById('gif-container');
+    
+    function getGif(){
+        fetch ("http://api.giphy.com/v1/gifs/random?api_key=B21fVBLZ6hlsMCQtsGjRsn0hI9QnDJQQ")
+        .then(function(response) {
+        return response.json()
+        })
+        .then(function(result){
+            const gifUrl = result.data.images.original.url
+            console.log(gifUrl)
+            gifContainer.innerHTML = `<img src='${gifUrl}'>`
+        })
+    }
+
+//   This is to get the search term and add it to the fetch url. Thanks Sandra!
+    document.getElementById("button").addEventListener("click", function(e) {
+    let searchTerm = document.getElementById("search-term").value;
+    event.preventDefault();
+    console.log("search term: " + searchTerm)
+    console.log(typeof searchTerm)
+    console.log(`http://api.giphy.com/v1/gifs/random?api_key=B21fVBLZ6hlsMCQtsGjRsn0hI9QnDJQQ&tag=${searchTerm}`)
+    fetch (`http://api.giphy.com/v1/gifs/random?api_key=B21fVBLZ6hlsMCQtsGjRsn0hI9QnDJQQ&tag=${searchTerm}`)
+        .then(function(response) {
+        return response.json()
+        })
+        .then(function(result){
+            const gifUrl = result.data.images.original.url
+            console.log(gifUrl)
+            gifContainer.innerHTML = `<img src='${gifUrl}'>`
+        })
+    });
+    </script>
+</body>
+</html>
